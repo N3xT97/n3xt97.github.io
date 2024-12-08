@@ -225,7 +225,7 @@ REG ADD "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "sy
 
 악성코드는 파일을 암호화하기 위해 **RSA, AES 알고리즘을 사용**합니다. 여기서 **PUBLIC 파일**은 user RSA PUBLIC KEY이고, UNIQUE_ID_DO_NOT_REMOVE는 user AES KEY로 암호화된 USER RSA PRIVATE KEY와 이 KEY를 암호화한 USER AES KEY가 attacker RSA PUBLIC KEY로 암호화되어 저장되어 있습니다.
 
-<img src="../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191045263.png" style="zoom:80%;" />
+<img src="../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191045263.png" alt="IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191045263.png" style="zoom:80%;" />
 
 ### ▪ <u>PUBLIC 생성</u>
 
@@ -347,7 +347,7 @@ encrypt 함수를 재귀적으로 호출하여 모든 파일을 순회합니다.
 
 따라서 암호화된 파일은 다음과 같은 구조를 가집니다. 만약 파일을 복호화하고 싶다면, 먼저 user RSA PRIVATE KEY를 획득하여 file AES KEY를 복호화한 후, 해당 file AES KEY를 사용하여 파일을 복호화해야 합니다.
 
-<img src="../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191045417.png" style="zoom:80%;" />
+<img src="../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191045417.png" alt = "IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191045417"style="zoom:80%;" />
 
 ## <mark>7. 네트워크 리소스 암호화</mark>
 
