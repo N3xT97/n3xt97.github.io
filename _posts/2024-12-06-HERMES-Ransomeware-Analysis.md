@@ -1,5 +1,5 @@
 ---
-title: '🛡️ "HERMES" Ransomeware Analysis'
+title: '🛡️ "HERMES", Ransomeware Analysis'
 date: 2024-12-06 21:00:00 +0900
 categories: [Malware Analysis Report]
 tags: [malware_analysis_report, ransomeware, hermes, lazarus]
@@ -106,7 +106,7 @@ render_with_liquid: false
 
 ## <mark>1. HERMES 랜섬웨어, 기초 분석</mark>
 
-### ■ <u>정적 분석</u>
+### ▪ <u>정적 분석</u>
 
 sample1-2 파일은 확장자가 없는 상태로 전달되었고, trid를 사용하여 확인해보니 **InstallShield setup** 포맷으로 확인되었습니다.
 
@@ -127,7 +127,7 @@ WinExec, InternetOpen 등의 의심스러운 API 또한 확인 가능했습니�
 
 <img src="../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191046488.png" alt="IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191046488" style="zoom:60%;" />
 
-### ■ <u>동적 분석</u>
+### ▪ <u>동적 분석</u>
 
 샘플을 실행하게 되면 **HERMES 2.0** 랜섬웨어 감염되었다는 창이 오픈됩니다. 바탕화면에는 **UNIQUE_ID_DO_NOT_REMOVE** 파일이 확인되고, 실행했던 sample1-2.exe가 삭제됩니다.
 
@@ -183,7 +183,7 @@ volume shadow 정리가 끝난 후에는 UNIQUE_ID_DO_NOT_REMOVE, DECRYPT_INFORM
 
 ## <mark>2. 실행 준비</mark>
 
-### ■ <u>수동 API 획득</u>
+### ▪ <u>수동 API 획득</u>
 
 악성코드가 sample1-2.exe로 실행되었을 때, main에 도달하게 되면 악성 행위를 수행할 준비를 하기 위해 여러 함수들을 실행하게 됩니다.
 
@@ -193,7 +193,7 @@ get_apis 함수에서는 PEB에 접근하여 ntdll_base를 획득한 후 get_api
 
 ![IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191049119](../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191049119.png)
 
-### ■ <u>winlogon.exe으로 재실행</u>
+### ▪ <u>winlogon.exe으로 재실행</u>
 
 이후 check_file_path를 호출하여 C:\users\Public\winlogon.exe 경로가 존재하는지 확인합니다. 만약 OS가 XP인 경우에는 C:\Documents and Settings\All Users\winlogon.exe 경로를 확인합니다.
 
@@ -209,7 +209,7 @@ get_apis 함수에서는 PEB에 접근하여 ntdll_base를 획득한 후 get_api
 
 ![IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191049553](../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191049553.png)
 
-### ■ <u>지속성 확보</u>
+### ▪ <u>지속성 확보</u>
 
 악성코드는 자신이 실행 실패했을 때를 대비하여 set_auto_run 함수를 통해 자신을 레지스트리에 등록하여 **지속성을 확보**합니다.
 
@@ -221,13 +221,13 @@ REG ADD "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "sy
 
 ## <mark>3. RSA 키 관련 파일 생성</mark>
 
-### ■ <u>PUBLIC, UNIQUE_ID_DO_NOT_REMOVE 파일</u>
+### ▪ <u>PUBLIC, UNIQUE_ID_DO_NOT_REMOVE 파일</u>
 
 악성코드는 파일을 암호화하기 위해 **RSA, AES 알고리즘을 사용**합니다. 여기서 **PUBLIC 파일**은 user RSA PUBLIC KEY이고, UNIQUE_ID_DO_NOT_REMOVE는 user AES KEY로 암호화된 USER RSA PRIVATE KEY와 이 KEY를 암호화한 USER AES KEY가 attacker RSA PUBLIC KEY로 암호화되어 저장되어 있습니다.
 
 <img src="../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191045263.png" style="zoom:80%;" />
 
-### ■ <u>PUBLIC 생성</u>
+### ▪ <u>PUBLIC 생성</u>
 
 악성코드는 PUBLIC 파일이 존재하는지 확인하고 존재하지 않으면 create_rsa_key_file를 호출하여 RSA키를 생성하고 암호화 합니다.
 
@@ -239,7 +239,7 @@ create_rsa_key_file에서는 **user RSA PUBLIC KEY를 생성하여 PUBLIC 파일
 
 ![IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191050203](../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191050203.png)
 
-### ■ <u>UNIQUE_ID_DO_NOT_REMOVE 생성</u>
+### ▪ <u>UNIQUE_ID_DO_NOT_REMOVE 생성</u>
 
 user RSA PRIVATE KEY는 user AES KEY를 생성하여 암호화하고 이 user AES KEY를 다시 attacker RSA PUBLIC KEY로 암호화하여 **C:\Users\Public\PUBLIC\UNIQUE_ID_DO_NOT_REMOVE** 파일에 저장합니다.
 
@@ -247,7 +247,7 @@ user RSA PRIVATE KEY는 user AES KEY를 생성하여 암호화하고 이 user AE
 
 ![IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191050541](../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191050541.png)
 
-### ■ <u>attacker RSA PUBLIC KEY</u>
+### ▪ <u>attacker RSA PUBLIC KEY</u>
 
 이 때 사용되는 **attacker RSA PUBLIC KEY는 winlogon.exe의 끝부분에 하드코딩**되어 있습니다. 해당 데이터는 가장 마지막 섹션인 rsrc 섹션에 포함되지 않는 부분이라 메모리 상에서는 attacker RSA PUBLIC KEY를 확인할 수 없게 끔 되어 있습니다.
 
@@ -257,19 +257,19 @@ user RSA PRIVATE KEY는 user AES KEY를 생성하여 암호화하고 이 user AE
 
 ## <mark>4. 파일 암호화 전 준비</mark>
 
-### ■ <u>AES context 생성</u>
+### ▪ <u>AES context 생성</u>
 
 악성코드는 파일을 암호화하기 전에 몇가지 준비를 합니다. 파일 암호화에 사용할 AES context를 생성합니다.
 
 ![IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191051034](../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191051034.png)
 
-### ■ <u>user RSA PUBLIC KEY 획득</u>
+### ▪ <u>user RSA PUBLIC KEY 획득</u>
 
 앞서 생성한 PUBLIC 파일에서 user RSA PUBLIC KEY를 획득합니다. 이 키는 파일 암호화에 사용되는 file AES KEY를 암호화하는데 사용됩니다.
 
 ![IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191051192](../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191051192.png)
 
-### ■ <u>DECRYPT_INFORMATION.html 복호화</u>
+### ▪ <u>DECRYPT_INFORMATION.html 복호화</u>
 
 그후 사용자에게 시스템이 암호화되었다는 사실을 알려주기 위한 DECRYPT_INFORMATION.html 파일을 복호화하고 bitmessage 주소를 세팅합니다.
 
@@ -285,7 +285,7 @@ encrypt 함수를 재귀적으로 호출하여 모든 파일을 순회합니다.
 
 ![IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191051712](../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191051712.png)
 
-### ■ <u>파일 체크</u>
+### ▪ <u>파일 체크</u>
 
 기본적으로 FindFirstFileW와 FindNextFileW를 사용하여 파일들 확인합니다. 이중 **Windows, microsoft, Microsoft, Program, All Users, Default, $Recycle.Bin, WINDOWS** 문자열이 포함되는 파일은 암호화에서 제외됩니다.
 
@@ -309,7 +309,7 @@ encrypt 함수를 재귀적으로 호출하여 모든 파일을 순회합니다.
 
 ![IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191052700](../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191052700.png)
 
-### ■ <u>UNIQUE_ID_DO_NOT_REMOVE 복사</u>
+### ▪ <u>UNIQUE_ID_DO_NOT_REMOVE 복사</u>
 
 파일 순회 과정에서 Desktop 폴더를 제외한 나머지 폴더에는 UNIQUE_ID_DO_NOT_REMOVE, DECRYPT_INFORMATION.html 파일을 생성합니다.
 
@@ -317,7 +317,7 @@ encrypt 함수를 재귀적으로 호출하여 모든 파일을 순회합니다.
 
 ## <mark>6. 파일 암호화</mark>
 
-### ■ <u>암호화된 파일인지 확인</u>
+### ▪ <u>암호화된 파일인지 확인</u>
 
 악성코드의 encrypt_file_content 함수는 파일 암호화를 담당합니다. **가장 먼저 파일 뒷부분으로부터 0x112 위치에 "HERMES"라는 문자가 있는지 확인**합니다. 해당 문자는 현재 파일이 암호화되어 있는지 확인하는 시그니쳐 역할을 합니다.
 
@@ -325,7 +325,7 @@ encrypt 함수를 재귀적으로 호출하여 모든 파일을 순회합니다.
 
 ![IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191053130](../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191053130.png)
 
-### ■ <u>파일 암호화</u>
+### ▪ <u>파일 암호화</u>
 
 파일을 암호화하기 전 file AES KEY를 하나 생성합니다. 이 **file AES KEY를 사용하여 파일을 암호화**합니다.
 
@@ -351,7 +351,7 @@ encrypt 함수를 재귀적으로 호출하여 모든 파일을 순회합니다.
 
 ## <mark>7. 네트워크 리소스 암호화</mark>
 
-### ■ <u>네트워크 리소스 경로 획득</u>
+### ▪ <u>네트워크 리소스 경로 획득</u>
 
 네트워크 드라이브를 암호화하기 위해 get_net_rsc_path를 호출하여 네트워크 리소스에 대한 경로들을 획득합니다. 획득한 리소스 경로는 **";"** 문자에 의해 구분되어 저장됩니다.
 
@@ -359,7 +359,7 @@ encrypt 함수를 재귀적으로 호출하여 모든 파일을 순회합니다.
 
 ![IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191054307](../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191054307.png)
 
-### ■ <u>네트워크 리소스 암호화</u>
+### ▪ <u>네트워크 리소스 암호화</u>
 
 획득한 네트워크 리소스 경로에 UNIQUE_ID_DO_NOT_REMOVE, DECRYPT_INFORMATION.html 파일을 생성한 후,  로컬 드라이브 암호화와 마찬가지로 encrypt 함수를 호출하여 파일들을 암호화 합니다.
 
@@ -367,13 +367,13 @@ encrypt 함수를 재귀적으로 호출하여 모든 파일을 순회합니다.
 
 ## <mark>8. 파일 암호화 완료 후</mark>
 
-### ■ <u>winlogon.exe의 auto run 삭제</u>
+### ▪ <u>winlogon.exe의 auto run 삭제</u>
 
 모든 파일 암호화가 완료되었다면, **Auto Run에 등록했던 winlogon.exe를 삭제**합니다.
 
 ![IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191054594](../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191054594.png)
 
-### ■ <u>shade.bat을 실행하여 volume shadow 삭제</u>
+### ▪ <u>shade.bat을 실행하여 volume shadow 삭제</u>
 
 delete_shadow 함수를 호출하여, **shade.bat 파일을 만들고 실행**합니다. 
 
@@ -407,7 +407,7 @@ del /s /f /q h:\\*.VHD h:\\*.bac h:\\*.bak h:\\*.wbcat h:\\*.bkf h:\\Backup*.* h
 del %0
 ```
 
-### ■ <u>사용자에게 공지</u>
+### ▪ <u>사용자에게 공지</u>
 
 <img src="../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191055062.png" alt="IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191055062" style="zoom:80%;" />
 
@@ -419,7 +419,7 @@ del %0
 
 ![IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191055488](../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191055488.png)
 
-### ■ <u>user ID 전송</u>
+### ▪ <u>user ID 전송</u>
 
 악성코드는 기록해놓았던 encrypted_data_size를 user ID로 attacker에게 전송합니다.
 
