@@ -1,8 +1,8 @@
 ---
 title: '🛡️ "HERMES" Ransomeware Analysis'
 date: 2024-12-06 21:00:00 +0900
-categories: [Malware Analysis]
-tags: [malware, analysis, ransomeware, hermes, lazarus]
+categories: [Malware Analysis Report]
+tags: [malware_analysis_report, ransomeware, hermes, lazarus]
 render_with_liquid: false
 ---
 
