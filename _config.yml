@@ -16,7 +16,7 @@ timezone: Asia/Seoul
 
 title: N3xT # the main title
 
-tagline: Malware Analyst # it will display as the subtitle
+tagline: 악성코드 분석,<br>그 자체가 재밌는 사람 # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   Malware Analyst, N3xT
