@@ -94,8 +94,8 @@ render_with_liquid: false
 
 ![IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191045562](../images/2024-12-06-HERMES-Ransomeware-Analysis/IMG-HERMES 랜섬웨어 상세 분석 보고서-20241205191045562.png)
 
-
-> ❗ 파일을 복호화하기 위해서는 **attacker RSA PRIVATE KEY**가 필요함.
+> [!IMPORTANT]   
+> 파일을 복호화하기 위해서는 **attacker RSA PRIVATE KEY**가 필요함.
 
 1. attacker RSA PRIVATE KEY를 사용해 user AES KEY 복호화
 2. user AES KEY를 사용하여 user RSA PRIVATE KEY를 복호화
